@@ -1,56 +1,67 @@
-// import java.util.ArrayList;
 import java.util.Scanner;
 
+class Node {
+    char data;
+    Node next;
+
+    Node(char data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
 public class Q1 {
-    public static void main(String[] agrs)
-    {
-        Scanner scan = new Scanner(System.in);
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the number of nodes: ");
+        int N = scanner.nextInt();
+        Node head = null;
+        Node tail = null;
 
-        int size = scan.nextInt();
-        int[] arr = new int[size];
-
-        for(int i=0; i<size; i++) arr[i] = scan.nextInt();
-        /*
-        Later....
-        ArrayList<Integer> arr = new ArrayList<Integer>();
-
-        int start = 1;
-        while(true)
-        {
-            int loc = input.indexOf(',', start);
-            if(loc == -1) {
-                // int ele = Integer.parseInt(input.substring(start+1, input.length()-1));
-                // arr.add(ele);
-                System.out.println(input.substring(start+1, input.length()-1));
-                break;
+        for (int i = 0; i < N; i++) {
+            System.out.print("Enter the data in Node" + (i + 1) + " : ");
+            char data = scanner.next().charAt(0);
+            Node newNode = new Node(data);
+            
+            if (head == null) {
+                head = newNode;
+                tail = newNode;
             } else {
-                System.out.println(input.substring(start+1, loc));
-                // int ele = Integer.parseInt(input.substring(start+1, loc));
-                // arr.add(ele);
-
-                start = loc;
+                tail.next = newNode;
+                tail = newNode;
             }
         }
-        */
 
-        // for(int i: arr) System.out.print(i+" ");
+        Node reversedHead = reverseList(head);
 
-        int left = 0, right = 1;
+        System.out.println("The reversed list is:");
+        printList(reversedHead);
+    }
 
-        for( ; right < size; right++) 
-        {
-            if(left > 1 && arr[left-1] == arr[right]) {
-                continue;
-            } else {
-                arr[left+1] = arr[right];
-                left++;
+    public static Node reverseList(Node head) {
+        Node prev = null;
+        Node current = head;
+        Node next = null;
+
+        while (current != null) {
+            next = current.next;
+            current.next = prev;
+            prev = current;
+            current = next;
+        }
+
+        return prev;
+    }
+
+    public static void printList(Node head) {
+        Node current = head;
+        while (current != null) {
+            System.out.print(current.data);
+            if (current.next != null) {
+                System.out.print("->");
             }
-        } 
-
-        System.out.println(left+1);
-
-        // for(int i=0; i<=left; i++) System.out.print(arr[i] + " ");
-
-        scan.close();
+            current = current.next;
+        }
+        System.out.println();
     }
 }

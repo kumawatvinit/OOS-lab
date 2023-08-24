@@ -1,27 +1,60 @@
-import java.util.Scanner;
+import java.util.*;
 
-public class Q5 {
-    public static void main(String[] agrs)
-    {
-        Scanner scan = new Scanner(System.in);
+class Person {
+    protected String personName;
 
-        System.out.print("Enter the inmate details: ");
-        String name = scan.next();
-        String role = scan.next();
-        String type = scan.next();
+    public Person(String personName) {
+        this.personName = personName;
+    }
 
-        System.out.print("Enter the number of days: ");
-        int n = scan.nextInt();
-
-        int price = (type.equals("veg") ? 100 : 120);
-        double total = price*n;
-
-        if(role.equals("employee")) {
-            total = total + total*0.05;
-        }
-        
-        System.out.println(total);
-
-        scan.close();
+    public String getPersonName() {
+        return personName;
     }
 }
+
+class Patient extends Person {
+    private String patientID;
+
+    public Patient(String personName, String patientID) {
+        super(personName);
+        this.patientID = patientID;
+    }
+
+    public String getPatientID() {
+        return patientID;
+    }
+
+    public int getAge() {
+        String ageString = patientID.substring(6); 
+        return Integer.parseInt(ageString);
+    }
+}
+
+public class Q5 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the number of patients: ");
+        int n = scanner.nextInt();
+        scanner.nextLine(); 
+
+        List<Patient> patients = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            System.out.println("Enter the details of patient " + (i + 1) + ":");
+            System.out.print("Name: ");
+            String name = scanner.nextLine();
+            System.out.print("Patient ID: ");
+            String patientID = scanner.nextLine();
+            patients.add(new Patient(name, patientID));
+        }
+
+        patients.sort((p1, p2) -> Integer.compare(p2.getAge(), p1.getAge())); 
+
+        System.out.println("List of Patients to be tested are:");
+        for (Patient patient : patients) {
+            System.out.println(patient.getPatientID() + " " + patient.getPersonName());
+        }
+    }
+}
+

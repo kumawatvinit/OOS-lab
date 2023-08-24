@@ -1,43 +1,72 @@
 import java.util.Scanner;
 
-public class Q4 {
-    public static boolean isPalindrome(String str, int start, int end)
-    {
-        while(start < end)
-        {
-            if(str.charAt(start) != str.charAt(end)) return false;
+class Employee {
+    protected int id;
+    protected String name;
+    protected String department;
+    protected int salary;
 
-            start++;
-            end--;
+    public Employee(int id, String name, String department, int salary) {
+        this.id = id;
+        this.name = name;
+        this.department = department;
+        this.salary = salary;
+    }
+
+    public int getSalary() {
+        return salary;
+    }
+
+    public String toString() {
+        return id + " " + name + " " + department + " " + salary;
+    }
+}
+
+class Manager extends Employee {
+    private int bonus;
+
+    public Manager(int id, String name, String department, int salary, int bonus) {
+        super(id, name, department, salary);
+        this.bonus = bonus;
+    }
+
+    public int getEffectiveSalary() {
+        return salary + bonus;
+    }
+
+    public String toString() {
+        return super.toString() + " " + bonus;
+    }
+}
+
+public class Q4 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the number of managers: ");
+        int n = scanner.nextInt();
+        Manager[] managers = new Manager[n];
+
+        for (int i = 0; i < n; i++) {
+            int id = scanner.nextInt();
+            String name = scanner.next();
+            String department = scanner.next();
+            int salary = scanner.nextInt();
+            int bonus = scanner.nextInt();
+            managers[i] = new Manager(id, name, department, salary, bonus);
         }
 
-        return true;
-    }
-    public static int solve(String str)
-    {
-        // Brute force
-        int ans = 1;
-        
-        for(int i=0; i<str.length(); i++)
-        {
-            for(int j=i+1; j<str.length(); j++)
-            {
-                if(isPalindrome(str, i, j)) {
-                    ans = Math.max(ans, j-i+1);
-                }
+        Manager maxSalaryManager = managers[0];
+        for (int i = 1; i < n; i++) {
+            if (managers[i].getEffectiveSalary() > maxSalaryManager.getEffectiveSalary()) {
+                maxSalaryManager = managers[i];
             }
         }
-
-        return ans;
-    }
-    public static void main(String[] agrs)
-    {
-        Scanner scan = new Scanner(System.in);
-
-        String str = scan.next();
-
-        System.out.println(solve(str));
-
-        scan.close();
+        
+        for (Manager manager : managers) {
+            if (manager.getEffectiveSalary() == maxSalaryManager.getEffectiveSalary()) {
+                System.out.println(manager);
+            }
+        }
     }
 }
